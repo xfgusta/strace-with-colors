@@ -12,6 +12,15 @@ cd strace-with-colors
 makepkg -si
 ```
 
+## Fedora Linux
+
+Arch Linux users may use the Copr [strace-with-colors](https://copr.fedorainfracloud.org/coprs/xfgusta/strace-with-colors/)
+
+```
+dnf copr enable xfgusta/strace-with-colors
+dnf install strace-with-colors
+```
+
 ### Applying the patch
 
 Clone the [strace git repository](https://github.com/strace/strace) and go to the directory
