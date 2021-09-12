@@ -21,7 +21,9 @@ dnf copr enable xfgusta/strace-with-colors
 dnf install strace-with-colors
 ```
 
-### Applying the patch
+---
+
+## Applying the patch
 
 Clone the [strace git repository](https://github.com/strace/strace) and go to the directory
 
