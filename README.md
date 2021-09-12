@@ -14,7 +14,7 @@ makepkg -si
 
 ## Fedora Linux
 
-Arch Linux users may use the Copr [strace-with-colors](https://copr.fedorainfracloud.org/coprs/xfgusta/strace-with-colors/)
+Fedora Linux users may use the Copr [strace-with-colors](https://copr.fedorainfracloud.org/coprs/xfgusta/strace-with-colors/)
 
 ```
 dnf copr enable xfgusta/strace-with-colors
