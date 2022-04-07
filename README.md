@@ -55,6 +55,12 @@ You may need to install `make`, `automake`, `gcc`. You can actually check all th
 
 The program will be in the `/usr/local/bin` directory. You can uninstall running `make uninstall` as root.
 
-## Screenshot
+## Screenshots
 
-![](screenshot.png?raw=true)
+### Colored output
+
+![](screenshot_01.png)
+
+### Default output (using `--no-color` option)
+
+![](screenshot_02.png)
