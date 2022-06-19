@@ -32,10 +32,10 @@ git clone https://github.com/strace/strace
 cd strace
 ```
 
-Checkout the tag `v5.17` (latest version)
+Checkout the tag `v5.18` (latest version)
 
 ```
-git checkout tags/v5.17
+git checkout tags/v5.18
 ```
 
 Get the patch source from [this repository](https://github.com/xfgusta/strace-with-colors) and apply it
