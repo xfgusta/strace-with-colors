@@ -57,4 +57,4 @@ The program will be in the `/usr/local/bin` directory. You can uninstall running
 
 ## Screenshot
 
-![](screenshot_01.png)
+![](screenshot.png)
