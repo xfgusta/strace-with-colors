@@ -1,59 +1,84 @@
 # strace, but with colors
 
-This patch adds colored output to the [strace](https://strace.io/) program. Follow the steps below to apply the patch correctly.
+This patch adds colored output to the [strace](https://strace.io/) program.
 
-## Arch Linux
+## The `--color` option
 
-Arch Linux users may use the AUR [strace-with-colors](https://aur.archlinux.org/packages/strace-with-colors)
+From `strace --help`
 
+```text
+  --color[=WHEN]
+                 colorize the output; WHEN can be 'always', 'auto' (default), or 'never'
 ```
+
++ `always` will always colorize the output
++ `never` will never colorize the output
++ `auto` will only colorize the output when standard output is connected to a terminal
+
+Using `--output` or setting the `NO_COLOR` environment variable will disable the colored output.
+
+## Installation
+
+### Arch Linux
+
+[**strace-with-colors**](https://aur.archlinux.org/packages/strace-with-colors) package from AUR
+
+```text
 git clone https://aur.archlinux.org/strace-with-colors.git
 cd strace-with-colors
 makepkg -si
 ```
 
-## Fedora Linux
+### Fedora Linux
 
-Fedora Linux users may use the Copr [strace-with-colors](https://copr.fedorainfracloud.org/coprs/xfgusta/strace-with-colors/)
+[**strace-with-colors**](https://copr.fedorainfracloud.org/coprs/xfgusta/strace-with-colors/) package from Copr
 
-```
+```text
 dnf copr enable xfgusta/strace-with-colors
 dnf install strace-with-colors
 ```
 
----
-
-## Applying the patch
+### From source
 
 Clone the [strace git repository](https://github.com/strace/strace) and go to the directory
 
-```
+```text
 git clone https://github.com/strace/strace
 cd strace
 ```
 
 Checkout the tag `v5.18` (latest version)
 
-```
+```text
 git checkout tags/v5.18
 ```
 
-Get the patch source from [this repository](https://github.com/xfgusta/strace-with-colors) and apply it
+Get the patch source [here](https://github.com/xfgusta/strace-with-colors) and apply it
 
-```
+```text
 curl -O https://raw.githubusercontent.com/xfgusta/strace-with-colors/main/strace-with-colors.patch
 git apply strace-with-colors.patch
 ```
 
 Now you are ready to build and install strace with colors!
 
-### Installing
+```text
+./bootstrap
+./configure --enable-mpers=no
+make install
+```
 
-Run `./bootstrap` and then `./configure`. To compile and install, run `make install` as root.
+You may need to install some dependencies before, like:
 
-You may need to install `make`, `automake`, `gcc`. You can actually check all the strace installation instructions [here](https://github.com/strace/strace/blob/master/README-configure).
++ `make`
++ `autoconf`
++ `automake`
++ `gcc`
++ ...
 
-The program will be in the `/usr/local/bin` directory. You can uninstall running `make uninstall` as root.
+You can actually check all the strace installation instructions [here](https://github.com/strace/strace/blob/master/README-configure).
+
+The program will be in the `/usr/local/bin` directory. You can uninstall it running `make uninstall`.
 
 ## Screenshot
 
