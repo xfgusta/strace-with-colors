@@ -699,7 +699,7 @@ index a6e698d4b..910b887f1 100644
  
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE || !cid_str)
 diff --git a/src/strace.c b/src/strace.c
-index ec338fe97..328a69a3a 100644
+index ec338fe97..1d73419eb 100644
 --- a/src/strace.c
 +++ b/src/strace.c
 @@ -43,6 +43,8 @@
@@ -828,34 +828,31 @@ index ec338fe97..328a69a3a 100644
  		{ "columns",		required_argument, 0, 'a' },
  		{ "output-append-mode",	no_argument,	   0, 'A' },
  		{ "detach-on",		required_argument, 0, 'b' },
-@@ -2354,6 +2397,26 @@ init(int argc, char *argv[])
+@@ -2354,6 +2397,23 @@ init(int argc, char *argv[])
  		case 'D':
  			daemonized_tracer++;
  			break;
 +		case GETOPT_COLOR:
 +			if(optarg) {
-+				if(!strcmp(optarg , "always") || !strcmp(optarg, "yes") ||
-+				   !strcmp(optarg, "force"))
++				if(!strcmp(optarg , "always"))
 +					no_color_flag = 0;
-+				else if(!strcmp(optarg, "never") || !strcmp(optarg, "no") ||
-+						!strcmp(optarg, "none"))
++				else if(!strcmp(optarg, "never"))
 +					no_color_flag = 1;
-+				else if(!strcmp(optarg, "auto") || !strcmp(optarg, "tty") ||
-+						!strcmp(optarg, "if-tty"))
++				else if(!strcmp(optarg, "auto"))
 +					no_color_flag = -1;
 +				else
-+					error_msg_and_die("Invalid argument \"%s\" for \"--color\"\n"
++					error_msg_and_die("invalid argument \"%s\" for \"--color\"\n"
 +							  "Valid arguments are:\n"
-+  							  "  - \"always\", \"yes\", \"force\"\n"
-+  							  "  - \"never\", \"no\", \"none\"\n"
-+							  "  - \"auto\", \"tty\", \"if-tty\"\n",
++							  "  - \"always\"\n"
++							  "  - \"never\"\n"
++							  "  - \"auto\"",
 +							  optarg);
 +			}
 +			break;
  		case GETOPT_DAEMONIZE:
  			daemonized_tracer_long =
  				find_arg_val(optarg, daemonize_str,
-@@ -2875,6 +2938,14 @@ init(int argc, char *argv[])
+@@ -2875,6 +2935,14 @@ init(int argc, char *argv[])
  			      qflag_short == 2 ? qqflag_qual : qqqflag_qual);
  	}
  
