@@ -83,3 +83,18 @@ The program will be in the `/usr/local/bin` directory. You can uninstall it runn
 ## Screenshot
 
 ![](screenshot.png)
+
+### Color scheme
+
+Here is the color scheme used in the screenshot above:
+
+| FG | Name    | Color     |
+| -- | ------- | --------- |
+| 0  | Black   | `#2d3139` |
+| 1  | Red     | `#e06c75` |
+| 2  | Green   | `#98c379` |
+| 3  | Yellow  | `#e5c07b` |
+| 4  | Blue    | `#528bff` |
+| 5  | Magenta | `#c678dd` |
+| 6  | Cyan    | `#56b6c2` |
+| 7  | White   | `#d7dae0` |
