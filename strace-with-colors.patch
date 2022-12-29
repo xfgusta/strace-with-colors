@@ -17,7 +17,7 @@ index 000000000..e84b06672
 +
 +#endif
 diff --git a/src/futex.c b/src/futex.c
-index 0cfb24de1..53d3ba613 100644
+index 1ed05d4f5..beda15213 100644
 --- a/src/futex.c
 +++ b/src/futex.c
 @@ -25,6 +25,7 @@
@@ -28,31 +28,8 @@ index 0cfb24de1..53d3ba613 100644
  
  static int
  do_futex(struct tcb *const tcp, const print_obj_by_addr_fn print_ts)
-@@ -113,18 +114,18 @@ do_futex(struct tcb *const tcp, const print_obj_by_addr_fn print_ts)
- 		tprint_arg_next();
- 		if ((val3 >> 28) & FUTEX_OP_OPARG_SHIFT) {
- 			print_xlat(FUTEX_OP_OPARG_SHIFT);
--			tprints("<<28|");
-+			tprints("<<" C_CYAN "28" C_RESET "|");
- 		}
- 		comment = printxval(futexwakeops, (val3 >> 28) & 0x7, NULL)
- 			? NULL : "FUTEX_OP_???";
--		tprints("<<28");
-+		tprints("<<" C_CYAN "28" C_RESET);
- 		tprints_comment(comment);
- 		tprints("|");
- 		PRINT_VAL_X((val3 >> 12) & 0xfff);
--		tprints("<<12|");
-+		tprints("<<" C_CYAN "12" C_RESET "|");
- 		comment = printxval(futexwakecmps, (val3 >> 24) & 0xf, NULL)
- 			? NULL : "FUTEX_OP_CMP_???";
--		tprints("<<24");
-+		tprints("<<" C_CYAN "24" C_RESET);
- 		tprints_comment(comment);
- 		tprints("|");
- 		PRINT_VAL_X(val3 & 0xfff);
 diff --git a/src/ioctl.c b/src/ioctl.c
-index 60dffa7aa..683f49973 100644
+index 5d97c2f51..1841ad532 100644
 --- a/src/ioctl.c
 +++ b/src/ioctl.c
 @@ -12,6 +12,7 @@
@@ -63,7 +40,7 @@ index 60dffa7aa..683f49973 100644
  
  #if defined(SPARC) || defined(SPARC64)
  /*
-@@ -448,10 +449,10 @@ SYS_FUNC(ioctl)
+@@ -449,10 +450,10 @@ SYS_FUNC(ioctl)
  				if (iop) {
  					if (ret)
  						tprint_alternative_value();
@@ -77,7 +54,7 @@ index 60dffa7aa..683f49973 100644
  				} else if (!ret) {
  					ioctl_print_code(tcp->u_arg[1]);
 diff --git a/src/ipc.c b/src/ipc.c
-index 81b5ce6e1..41be7d560 100644
+index e210ea48c..895ba59b9 100644
 --- a/src/ipc.c
 +++ b/src/ipc.c
 @@ -8,6 +8,7 @@
@@ -88,17 +65,8 @@ index 81b5ce6e1..41be7d560 100644
  
  SYS_FUNC(ipc)
  {
-@@ -17,7 +18,7 @@ SYS_FUNC(ipc)
- 
- 	if (version) {
- 		PRINT_VAL_U(version);
--		tprints("<<16|");
-+		tprints("<<" C_CYAN "16" C_RESET "|");
- 	}
- 
- 	printxval_u(ipccalls, call, NULL);
 diff --git a/src/ipc_shm.c b/src/ipc_shm.c
-index 0e5b01028..a5c1fa7a3 100644
+index 024b9578e..50dd3d4f6 100644
 --- a/src/ipc_shm.c
 +++ b/src/ipc_shm.c
 @@ -26,6 +26,7 @@
@@ -109,17 +77,8 @@ index 0e5b01028..a5c1fa7a3 100644
  
  SYS_FUNC(shmget)
  {
-@@ -47,7 +48,7 @@ SYS_FUNC(shmget)
- 		printflags(shm_resource_flags, flags, NULL);
- 
- 	if (hugetlb_value) {
--		tprintf("%s%u<<",
-+		tprintf("%s" C_CYAN "%u" C_RESET "<<",
- 			flags ? "|" : "",
- 			hugetlb_value >> SHM_HUGE_SHIFT);
- 		print_xlat_u(SHM_HUGE_SHIFT);
 diff --git a/src/mem.c b/src/mem.c
-index d34a92118..d4158fdb9 100644
+index b76220199..fc31fde30 100644
 --- a/src/mem.c
 +++ b/src/mem.c
 @@ -14,6 +14,7 @@
@@ -130,17 +89,17 @@ index d34a92118..d4158fdb9 100644
  
  unsigned long
  get_pagesize(void)
-@@ -80,7 +81,7 @@ print_mmap_flags(kernel_ulong_t flags)
+@@ -87,7 +88,7 @@ print_mmap_flags(kernel_ulong_t flags)
+ 		 * print_xlat_u is not used here because the whole thing
+ 		 * is potentially inside a comment already.
+ 		 */
+-		tprints("MAP_HUGE_SHIFT");
++		tprints(C_YELLOW "MAP_HUGE_SHIFT" C_RESET);
  	}
- 
- 	if (hugetlb_value)
--		tprintf("|%u<<MAP_HUGE_SHIFT",
-+		tprintf("|" C_CYAN "%u" C_RESET "<<" C_YELLOW "MAP_HUGE_SHIFT" C_RESET,
- 			hugetlb_value >> MAP_HUGE_SHIFT);
  
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE)
 diff --git a/src/memfd_create.c b/src/memfd_create.c
-index 16a26533b..2ffbe0680 100644
+index e13042bf5..cd5498d2e 100644
 --- a/src/memfd_create.c
 +++ b/src/memfd_create.c
 @@ -9,6 +9,7 @@
@@ -151,15 +110,15 @@ index 16a26533b..2ffbe0680 100644
  
  #ifndef MFD_NAME_MAX_LEN
  # define MFD_NAME_MAX_LEN (255 - (sizeof("memfd:") - 1))
-@@ -41,7 +42,7 @@ SYS_FUNC(memfd_create)
- 			      memfd_create_flags, NULL);
+@@ -49,7 +50,7 @@ SYS_FUNC(memfd_create)
+ 		 * print_xlat_u is not used here because the whole thing
+ 		 * is potentially inside a comment already.
+ 		 */
+-		tprints("MFD_HUGE_SHIFT");
++		tprints(C_YELLOW "MFD_HUGE_SHIFT" C_RESET);
+ 	}
  
- 	if (hugetlb_value)
--		tprintf("%s%u<<MFD_HUGE_SHIFT",
-+		tprintf("%s" C_CYAN "%u" C_RESET "<<" C_YELLOW "MFD_HUGE_SHIFT" C_RESET,
- 			flags ? "|" : "",
- 			hugetlb_value >> MFD_HUGE_SHIFT);
- 
+ 	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE)
 diff --git a/src/mmsghdr.c b/src/mmsghdr.c
 index 0e313678b..dfb2e8881 100644
 --- a/src/mmsghdr.c
@@ -182,7 +141,7 @@ index 0e313678b..dfb2e8881 100644
  		dumpiov_upto(tcp, mmsg.msg_hdr.msg_iovlen,
  			     ptr_to_kulong(mmsg.msg_hdr.msg_iov),
 diff --git a/src/netlink.c b/src/netlink.c
-index d8e4efece..459e7d17e 100644
+index 25fe7f117..483d9c513 100644
 --- a/src/netlink.c
 +++ b/src/netlink.c
 @@ -52,6 +52,7 @@
@@ -193,17 +152,8 @@ index d8e4efece..459e7d17e 100644
  
  /*
   * Fetch a struct nlmsghdr from the given address.
-@@ -180,7 +181,7 @@ decode_nlmsg_type_netfilter(struct tcb *tcp, const struct xlat *const xlat,
- 
- 	printxval(xlat, subsys_id, dflt);
- 
--	tprints("<<8|");
-+	tprints("<<" C_CYAN "8" C_RESET "|");
- 	if (subsys_id < ARRAY_SIZE(nf_nlmsg_types))
- 		printxval(nf_nlmsg_types[subsys_id].xlat,
- 			  msg_type, nf_nlmsg_types[subsys_id].dflt);
 diff --git a/src/netlink_netlink_diag.c b/src/netlink_netlink_diag.c
-index 35fbb645d..8e22e8f54 100644
+index e0d689421..70829659e 100644
 --- a/src/netlink_netlink_diag.c
 +++ b/src/netlink_netlink_diag.c
 @@ -19,6 +19,7 @@
@@ -214,24 +164,11 @@ index 35fbb645d..8e22e8f54 100644
  
  DECL_NETLINK_DIAG_DECODER(decode_netlink_diag_req)
  {
-@@ -61,10 +62,10 @@ print_group(struct tcb *const tcp,
- 	    void *const opaque_data)
- {
- 	if (elem_size < sizeof(kernel_ulong_t))
--		tprintf("%#0*x", (int) elem_size * 2 + 2,
-+		tprintf(C_CYAN "%#0*x" C_RESET, (int) elem_size * 2 + 2,
- 			*(unsigned int *) elem_buf);
- 	else
--		tprintf("%#0*" PRI_klx, (int) elem_size * 2 + 2,
-+		tprintf(C_CYAN "%#0*" PRI_klx C_RESET, (int) elem_size * 2 + 2,
- 			*(kernel_ulong_t *) elem_buf);
- 
- 	return true;
 diff --git a/src/numa.c b/src/numa.c
-index 74156203f..167c55586 100644
+index f594da0bd..cbf1c8a20 100644
 --- a/src/numa.c
 +++ b/src/numa.c
-@@ -8,15 +8,16 @@
+@@ -8,6 +8,7 @@
   */
  
  #include "defs.h"
@@ -239,28 +176,17 @@ index 74156203f..167c55586 100644
  
  static bool
  print_node(struct tcb *tcp, void *elem_buf, size_t elem_size, void *data)
- {
- 	if (elem_size < sizeof(kernel_ulong_t)) {
--		tprintf("%#0*x", (int) elem_size * 2 + 2,
-+		tprintf(C_CYAN "%#0*x" C_RESET, (int) elem_size * 2 + 2,
- 			*(unsigned int *) elem_buf);
- 	} else {
--		tprintf("%#0*" PRI_klx, (int) elem_size * 2 + 2,
-+		tprintf(C_CYAN "%#0*" PRI_klx C_RESET, (int) elem_size * 2 + 2,
- 			*(kernel_ulong_t *) elem_buf);
- 	}
- 
 @@ -95,7 +96,7 @@ print_mode(struct tcb *const tcp, const kernel_ulong_t mode_arg)
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE)
  		tprint_comment_begin();
  
 -	tprints(mode_str);
 +	tprintf(C_YELLOW "%s" C_RESET, mode_str);
- 	tprints("|");
+ 	tprint_or();
  	printflags_ex(flags, NULL, XLAT_STYLE_ABBREV, mpol_mode_flags, NULL);
  
 diff --git a/src/perf.c b/src/perf.c
-index 805bfb649..0855d426f 100644
+index 4e6a730c3..4e25d6d53 100644
 --- a/src/perf.c
 +++ b/src/perf.c
 @@ -25,6 +25,7 @@
@@ -271,54 +197,8 @@ index 805bfb649..0855d426f 100644
  
  struct pea_desc {
  	struct perf_event_attr *attr;
-@@ -159,7 +160,7 @@ print_perf_event_attr(struct tcb *const tcp, const kernel_ulong_t addr)
- 		tprints_field_name("config");
- 		if (attr->config >> 32) {
- 			PRINT_VAL_X(attr->config >> 32);
--			tprints("<<32|");
-+			tprints("<<" C_CYAN "32" C_RESET "|");
- 		}
- 		printxval(perf_hw_id, attr->config & PERF_HW_EVENT_MASK,
- 			   "PERF_COUNT_HW_???");
-@@ -190,19 +191,19 @@ print_perf_event_attr(struct tcb *const tcp, const kernel_ulong_t addr)
- 		tprints_field_name("config");
- 		if (attr->config >> 32){
- 			PRINT_VAL_X(attr->config >> 32);
--			tprints("<<32|");
-+			tprints("<<" C_CYAN "32" C_RESET "|");
- 		}
- 		if ((attr->config & PERF_HW_EVENT_MASK) >> 24) {
- 			PRINT_VAL_X((attr->config & PERF_HW_EVENT_MASK) >> 24);
--			tprints("<<24|");
-+			tprints("<<" C_CYAN "24" C_RESET "|");
- 		}
- 		printxval(perf_hw_cache_op_result_id,
- 			  (attr->config >> 16) & 0xFF,
- 			  "PERF_COUNT_HW_CACHE_RESULT_???");
--		tprints("<<16|");
-+		tprints("<<" C_CYAN "16" C_RESET "|");
- 		printxval(perf_hw_cache_op_id, (attr->config >> 8) & 0xFF,
- 			   "PERF_COUNT_HW_CACHE_OP_???");
--		tprints("<<8|");
-+		tprints("<<" C_CYAN "8" C_RESET "|");
- 		printxval(perf_hw_cache_id, attr->config & 0xFF,
- 			  "PERF_COUNT_HW_CACHE_???");
- 		break;
-diff --git a/src/personality.c b/src/personality.c
-index 8e16930ac..0332302a2 100644
---- a/src/personality.c
-+++ b/src/personality.c
-@@ -18,7 +18,7 @@ SYS_FUNC(personality)
- 	if (entering(tcp)) {
- 		pers = tcp->u_arg[0];
- 		if (0xffffffff == pers) {
--			tprints("0xffffffff");
-+			tprints(C_CYAN "0xffffffff" C_RESET);
- 		} else {
- 			printxval(personality_types, pers & PER_MASK, "PER_???");
- 			pers &= ~PER_MASK;
 diff --git a/src/print_fields.h b/src/print_fields.h
-index 8a01d053d..bd71cb4b4 100644
+index 813876156..08711bb84 100644
 --- a/src/print_fields.h
 +++ b/src/print_fields.h
 @@ -10,6 +10,7 @@
@@ -345,7 +225,16 @@ index 8a01d053d..bd71cb4b4 100644
  }
  
  static inline void
-@@ -195,35 +196,35 @@ tprint_or(void)
+@@ -231,7 +232,7 @@ tprint_space(void)
+ static inline void
+ tprint_null(void)
+ {
+-	STRACE_PRINTS("NULL");
++	STRACE_PRINTS(C_CYAN "NULL" C_RESET);
+ }
+ 
+ static inline void
+@@ -243,35 +244,35 @@ tprint_newline(void)
  static inline void
  tprints_field_name(const char *name)
  {
@@ -390,25 +279,25 @@ index 8a01d053d..bd71cb4b4 100644
  
  # define PRINT_VAL_ID(val_)						\
 diff --git a/src/print_instruction_pointer.c b/src/print_instruction_pointer.c
-index c0d07a6fb..f5d324e17 100644
+index 8aa906887..f5d324d35 100644
 --- a/src/print_instruction_pointer.c
 +++ b/src/print_instruction_pointer.c
-@@ -14,8 +14,8 @@ print_instruction_pointer(struct tcb *tcp)
- 
+@@ -15,8 +15,8 @@ print_instruction_pointer(struct tcb *tcp)
+ 	tprint_attribute_begin();
  	if (get_instruction_pointer(tcp, &ip)) {
  		tprintf(current_wordsize == 4
--			? "[%08" PRI_klx "] "
--			: "[%016" PRI_klx "] ", ip);
-+			? "[" C_CYAN "%08" PRI_klx C_RESET "] "
-+			: "[" C_CYAN "%016" PRI_klx C_RESET "] ", ip);
+-			? "%08" PRI_klx
+-			: "%016" PRI_klx, ip);
++			? C_CYAN "%08" PRI_klx C_RESET
++			: C_CYAN "%016" PRI_klx C_RESET, ip);
  	} else {
  		tprints(current_wordsize == 4
- 			? "[????????] "
+ 			? "????????"
 diff --git a/src/print_syscall_number.c b/src/print_syscall_number.c
-index f9e146059..24e41cb51 100644
+index bcca7b502..e458cff5d 100644
 --- a/src/print_syscall_number.c
 +++ b/src/print_syscall_number.c
-@@ -6,12 +6,13 @@
+@@ -6,13 +6,14 @@
   */
  
  #include "defs.h"
@@ -417,12 +306,13 @@ index f9e146059..24e41cb51 100644
  void
  print_syscall_number(struct tcb *tcp)
  {
- 	if (tcp->true_scno != (kernel_ulong_t) -1) {
--		tprintf("[%4" PRI_klu "] ", tcp->true_scno);
-+		tprintf("[" C_CYAN "%4" PRI_klu C_RESET "] ", tcp->true_scno);
- 	} else {
- 		tprints("[????] ");
- 	}
+ 	tprint_attribute_begin();
+ 	if (tcp->true_scno != (kernel_ulong_t) -1)
+-		tprintf("%4" PRI_klu, tcp->true_scno);
++		tprintf(C_CYAN "%4" PRI_klu C_RESET, tcp->true_scno);
+ 	else
+ 		tprint_unavailable();
+ 	tprint_attribute_end();
 diff --git a/src/printmode.c b/src/printmode.c
 index b509411a5..111e6ebc8 100644
 --- a/src/printmode.c
@@ -460,7 +350,7 @@ index b509411a5..111e6ebc8 100644
  
  void
 diff --git a/src/ptrace.c b/src/ptrace.c
-index 2115ccbfd..bd2872425 100644
+index 1f47255d9..e683b0358 100644
 --- a/src/ptrace.c
 +++ b/src/ptrace.c
 @@ -31,6 +31,7 @@
@@ -471,17 +361,8 @@ index 2115ccbfd..bd2872425 100644
  
  #define uoff(member)	offsetof(struct user, member)
  #define XLAT_UOFF(member)	{ uoff(member), "offsetof(struct user, " #member ")" }
-@@ -76,7 +77,7 @@ print_user_offset_addr(const kernel_ulong_t addr)
- 	if (base_addr == addr)
- 		tprints(str);
- 	else
--		tprintf("%s + %" PRI_klu,
-+		tprintf("%s + " C_CYAN "%" PRI_klu C_RESET,
- 			str, addr - (kernel_ulong_t) base_addr);
- 
- 	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE)
 diff --git a/src/s390.c b/src/s390.c
-index 5f024142b..ea3c30405 100644
+index 372c4dc3c..348f9fca4 100644
 --- a/src/s390.c
 +++ b/src/s390.c
 @@ -16,6 +16,7 @@
@@ -501,7 +382,7 @@ index 5f024142b..ea3c30405 100644
  	tprint_struct_begin();
  	if (!abbrev(tcp)) {
  		if (hdr->infmflg1) { /* Reserved */
-@@ -621,7 +622,7 @@ print_sthyi_partition(struct tcb *tcp, struct sthyi_partition *hdr,
+@@ -620,7 +621,7 @@ print_sthyi_partition(struct tcb *tcp, struct sthyi_partition *hdr,
  
  	*mt = !!(hdr->infpflg1 & 0x80);
  
@@ -510,7 +391,7 @@ index 5f024142b..ea3c30405 100644
  	tprint_struct_begin();
  	PRINT_FIELD_0X(*hdr, infpflg1);
  	if (!abbrev(tcp) && hdr->infpflg1)
-@@ -792,7 +793,7 @@ print_funcs(const uint8_t funcs[8])
+@@ -791,7 +792,7 @@ print_funcs(const uint8_t funcs[8])
  			tprint_comment_begin();
  			cont = true;
  		}
@@ -519,7 +400,7 @@ index 5f024142b..ea3c30405 100644
  	}
  
  	if (cont)
-@@ -807,7 +808,7 @@ print_sthyi_hypervisor(struct tcb *tcp, struct sthyi_hypervisor *hdr,
+@@ -806,7 +807,7 @@ print_sthyi_hypervisor(struct tcb *tcp, struct sthyi_hypervisor *hdr,
  
  	CHECK_SIZE_EX(hdr, last_decoded, size, "hypervisor %d structure", num);
  
@@ -528,7 +409,7 @@ index 5f024142b..ea3c30405 100644
  	tprint_struct_begin();
  	PRINT_FIELD_0X(*hdr, infyflg1);
  	if (!abbrev(tcp) && hdr->infyflg1)
-@@ -923,7 +924,7 @@ print_sthyi_guest(struct tcb *tcp, struct sthyi_guest *hdr, uint16_t size,
+@@ -922,7 +923,7 @@ print_sthyi_guest(struct tcb *tcp, struct sthyi_guest *hdr, uint16_t size,
  {
  	CHECK_SIZE(hdr, size, "guest %d structure", num);
  
@@ -537,7 +418,7 @@ index 5f024142b..ea3c30405 100644
  	tprint_struct_begin();
  	PRINT_FIELD_0X(*hdr, infgflg1);
  	if (!abbrev(tcp) && hdr->infgflg1)
-@@ -1133,7 +1134,7 @@ print_sthyi_buf(struct tcb *tcp, kernel_ulong_t ptr)
+@@ -1132,7 +1133,7 @@ print_sthyi_buf(struct tcb *tcp, kernel_ulong_t ptr)
  	tprint_struct_begin();
  
  	/* Header */
@@ -546,16 +427,7 @@ index 5f024142b..ea3c30405 100644
  	tprint_struct_begin();
  	PRINT_FIELD_0X(*hdr, infhflg1);
  
-@@ -1284,7 +1285,7 @@ SYS_FUNC(s390_sthyi)
- 
- 		tprints(", ");
- 		printnum_int64(tcp, return_code_ptr, "%" PRIu64);
--		tprintf(", %#" PRI_klx, flags);
-+		tprintf(", " C_CYAN "%#" PRI_klx C_RESET, flags);
- 	}
- 
- 	return 0;
-@@ -1348,7 +1349,7 @@ guard_storage_print_gsepl(struct tcb *tcp, uint64_t addr)
+@@ -1349,7 +1350,7 @@ guard_storage_print_gsepl(struct tcb *tcp, uint64_t addr)
  	/* Since it is 64-bit even on 31-bit s390... */
  	if (sizeof(addr) > current_klongsize &&
  	    addr >= (1ULL << (current_klongsize * 8))) {
@@ -564,35 +436,6 @@ index 5f024142b..ea3c30405 100644
  
  		return;
  	}
-@@ -1515,9 +1516,9 @@ SYS_FUNC(s390_pci_mmio_write)
- 	kernel_ulong_t user_buf  = tcp->u_arg[1];
- 	kernel_ulong_t length    = tcp->u_arg[2];
- 
--	tprintf("%#" PRI_klx ", ", mmio_addr);
-+	tprintf(C_CYAN "%#" PRI_klx C_RESET ", ", mmio_addr);
- 	printstr_ex(tcp, user_buf, length, QUOTE_FORCE_HEX);
--	tprintf(", %" PRI_klu, length);
-+	tprintf(", " C_CYAN "%" PRI_klu C_RESET, length);
- 
- 	return RVAL_DECODED;
- }
-@@ -1529,14 +1530,14 @@ SYS_FUNC(s390_pci_mmio_read)
- 	kernel_ulong_t length    = tcp->u_arg[2];
- 
- 	if (entering(tcp)) {
--		tprintf("%#" PRI_klx ", ", mmio_addr);
-+		tprintf(C_CYAN "%#" PRI_klx C_RESET ", ", mmio_addr);
- 	} else {
- 		if (!syserror(tcp))
- 			printstr_ex(tcp, user_buf, length, QUOTE_FORCE_HEX);
- 		else
- 			printaddr(user_buf);
- 
--		tprintf(", %" PRI_klu, length);
-+		tprintf(", " C_CYAN "%" PRI_klu C_RESET, length);
- 	}
- 
- 	return 0;
 diff --git a/src/signal.c b/src/signal.c
 index fc13a6613..2f5a6e125 100644
 --- a/src/signal.c
@@ -635,7 +478,7 @@ index fc13a6613..2f5a6e125 100644
  	return RVAL_DECODED;
  }
 diff --git a/src/sockaddr.c b/src/sockaddr.c
-index 9139da1cd..5bf7a53fd 100644
+index a8769082e..f3aa872f5 100644
 --- a/src/sockaddr.c
 +++ b/src/sockaddr.c
 @@ -39,6 +39,7 @@
@@ -655,17 +498,8 @@ index 9139da1cd..5bf7a53fd 100644
  			}
  			tprint_arg_end();
  
-@@ -574,7 +575,7 @@ print_sockaddr_data_ll(struct tcb *tcp, const void *const buf,
- 				tprint_more_data_follows();
- 				break;
- 			}
--			tprintf("%#02x", sa_ll->sll_addr[i]);
-+			tprintf(C_CYAN "%#02x" C_RESET, sa_ll->sll_addr[i]);
- 		}
- 		tprint_array_end();
- 	}
 @@ -628,7 +629,7 @@ print_bluetooth_l2_psm(uint16_t psm)
- 		tprints(" + ");
+ 		tprint_plus();
  		PRINT_VAL_U(psm_he - L2CAP_PSM_DYN_START);
  	} else {
 -		tprints("L2CAP_PSM_???");
@@ -674,7 +508,7 @@ index 9139da1cd..5bf7a53fd 100644
  
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE || !psm_str)
 @@ -663,7 +664,7 @@ print_bluetooth_l2_cid(uint16_t cid)
- 		tprints(" + ");
+ 		tprint_plus();
  		PRINT_VAL_U(cid_he - L2CAP_CID_DYN_START);
  	} else {
 -		tprints("L2CAP_CID_???");
@@ -683,7 +517,7 @@ index 9139da1cd..5bf7a53fd 100644
  
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE || !cid_str)
 diff --git a/src/strace.c b/src/strace.c
-index 3f5a00a0a..499e143a9 100644
+index a35aed8eb..c1a5a5b47 100644
 --- a/src/strace.c
 +++ b/src/strace.c
 @@ -43,6 +43,8 @@
@@ -717,7 +551,7 @@ index 3f5a00a0a..499e143a9 100644
    -a COLUMN, --columns=COLUMN\n\
                   alignment COLUMN for printing syscall results (default %d)\n\
    -e abbrev=SET, --abbrev=SET\n\
-@@ -702,7 +712,23 @@ static void
+@@ -704,7 +714,23 @@ static void
  tvprintf(const char *const fmt, va_list args)
  {
  	if (current_tcp) {
@@ -742,7 +576,7 @@ index 3f5a00a0a..499e143a9 100644
  		if (n < 0) {
  			/* very unlikely due to vfprintf buffering */
  			outf_perror(current_tcp);
-@@ -728,7 +754,22 @@ void
+@@ -730,7 +756,22 @@ void
  tprints(const char *str)
  {
  	if (current_tcp) {
@@ -766,7 +600,7 @@ index 3f5a00a0a..499e143a9 100644
  		if (n >= 0) {
  			current_tcp->curcol += strlen(str);
  			return;
-@@ -742,7 +783,7 @@ void
+@@ -744,7 +785,7 @@ void
  tprints_comment(const char *const str)
  {
  	if (str && *str)
@@ -775,7 +609,7 @@ index 3f5a00a0a..499e143a9 100644
  }
  
  void
-@@ -863,7 +904,7 @@ printleader(struct tcb *tcp)
+@@ -868,7 +909,7 @@ printleader(struct tcb *tcp)
  		else
  			xsprintf(str, "%lld", (long long) local);
  		if (tflag_width)
@@ -784,7 +618,7 @@ index 3f5a00a0a..499e143a9 100644
  				(long) ts.tv_nsec / tflag_scale);
  		else
  			tprintf("%s ", str);
-@@ -881,9 +922,9 @@ printleader(struct tcb *tcp)
+@@ -886,9 +927,9 @@ printleader(struct tcb *tcp)
  		ts_sub(&dts, &ts, &ots);
  		ots = ts;
  
@@ -796,7 +630,7 @@ index 3f5a00a0a..499e143a9 100644
  				rflag_width, (long) dts.tv_nsec / rflag_scale);
  		}
  		tprints(tflag_format ? ") " : " ");
-@@ -2238,6 +2279,7 @@ init(int argc, char *argv[])
+@@ -2243,6 +2284,7 @@ init(int argc, char *argv[])
  
  	enum {
  		GETOPT_SECCOMP = 0x100,
@@ -804,7 +638,7 @@ index 3f5a00a0a..499e143a9 100644
  		GETOPT_DAEMONIZE,
  		GETOPT_HEX_STR,
  		GETOPT_FOLLOWFORKS,
-@@ -2263,6 +2305,7 @@ init(int argc, char *argv[])
+@@ -2268,6 +2310,7 @@ init(int argc, char *argv[])
  		GETOPT_QUAL_SECONTEXT,
  	};
  	static const struct option longopts[] = {
@@ -812,7 +646,7 @@ index 3f5a00a0a..499e143a9 100644
  		{ "columns",		required_argument, 0, 'a' },
  		{ "output-append-mode",	no_argument,	   0, 'A' },
  		{ "detach-on",		required_argument, 0, 'b' },
-@@ -2370,6 +2413,23 @@ init(int argc, char *argv[])
+@@ -2375,6 +2418,23 @@ init(int argc, char *argv[])
  		case 'D':
  			daemonized_tracer++;
  			break;
@@ -836,7 +670,7 @@ index 3f5a00a0a..499e143a9 100644
  		case GETOPT_DAEMONIZE:
  			daemonized_tracer_long =
  				find_arg_val(optarg, daemonize_str,
-@@ -2886,6 +2946,14 @@ init(int argc, char *argv[])
+@@ -2891,6 +2951,14 @@ init(int argc, char *argv[])
  			      qflag_short == 2 ? qqflag_qual : qqqflag_qual);
  	}
  
@@ -852,7 +686,7 @@ index 3f5a00a0a..499e143a9 100644
  	 * startup_child() must be called before the signal handlers get
  	 * installed below as they are inherited into the spawned process.
 diff --git a/src/swapon.c b/src/swapon.c
-index 72ac42308..214d49ad6 100644
+index 9e48439ff..5fc8b8952 100644
 --- a/src/swapon.c
 +++ b/src/swapon.c
 @@ -10,6 +10,7 @@
@@ -863,17 +697,8 @@ index 72ac42308..214d49ad6 100644
  
  SYS_FUNC(swapon)
  {
-@@ -24,7 +25,7 @@ SYS_FUNC(swapon)
- 	/* swapflags */
- 	if (flags) {
- 		printflags(swap_flags, flags, "SWAP_FLAG_???");
--		tprintf("|%u", prio);
-+		tprintf("|" C_CYAN "%u" C_RESET, prio);
- 	} else {
- 		PRINT_VAL_U(prio);
- 	}
 diff --git a/src/syscall.c b/src/syscall.c
-index 92aaee092..22acd6a05 100644
+index 90c4fbd8a..ad7b58165 100644
 --- a/src/syscall.c
 +++ b/src/syscall.c
 @@ -421,7 +421,7 @@ print_err(int64_t err, bool negated)
@@ -907,7 +732,7 @@ index 92aaee092..22acd6a05 100644
  	}
  }
  
-@@ -835,7 +835,7 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
+@@ -836,7 +836,7 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
  		if (tcp->u_error)
  			print_err_ret(tcp->u_rval, tcp->u_error);
  		else
@@ -916,7 +741,7 @@ index 92aaee092..22acd6a05 100644
  
  		print_injected_note(tcp);
  	} else if (!(sys_res & RVAL_NONE) && tcp->u_error) {
-@@ -908,12 +908,12 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
+@@ -909,12 +909,12 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
  			case RVAL_HEX:
  #if ANY_WORDSIZE_LESS_THAN_KERNEL_LONG
  				if (current_klongsize < sizeof(tcp->u_rval)) {
@@ -931,7 +756,7 @@ index 92aaee092..22acd6a05 100644
  				}
  				break;
  			case RVAL_OCTAL: {
-@@ -930,12 +930,12 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
+@@ -931,12 +931,12 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
  			case RVAL_UDECIMAL:
  #if ANY_WORDSIZE_LESS_THAN_KERNEL_LONG
  				if (current_klongsize < sizeof(tcp->u_rval)) {
@@ -946,7 +771,7 @@ index 92aaee092..22acd6a05 100644
  				}
  				break;
  			case RVAL_FD:
-@@ -948,7 +948,7 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
+@@ -949,7 +949,7 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
  					tprints("= ");
  					printfd(tcp, tcp->u_rval);
  				} else {
@@ -955,173 +780,50 @@ index 92aaee092..22acd6a05 100644
  				}
  				break;
  			case RVAL_TID:
-@@ -977,9 +977,9 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
- 	}
- 	if (Tflag) {
+@@ -982,7 +982,7 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
  		ts_sub(ts, ts, &tcp->etime);
--		tprintf(" <%ld", (long) ts->tv_sec);
-+		tprintf(" <" C_CYAN "%ld" C_RESET, (long) ts->tv_sec);
+ 		PRINT_VAL_D(ts->tv_sec);
  		if (Tflag_width) {
 -			tprintf(".%0*ld",
 +			tprintf("." C_CYAN "%0*ld" C_RESET,
  				Tflag_width, (long) ts->tv_nsec / Tflag_scale);
  		}
- 		tprints(">");
+ 		tprint_associated_info_end();
 diff --git a/src/sysctl.c b/src/sysctl.c
-index 55911d865..7ea71a198 100644
+index 8624e018e..bd48df718 100644
 --- a/src/sysctl.c
 +++ b/src/sysctl.c
-@@ -23,6 +23,7 @@
- #include "xlat/sysctl_net_ipv4_conf.h"
- #include "xlat/sysctl_net_ipv6.h"
- #include "xlat/sysctl_net_ipv6_route.h"
+@@ -11,6 +11,7 @@
+ #include <linux/sysctl.h>
+ typedef struct __sysctl_args struct_sysctl_args;
+ #include MPERS_DEFS
 +#include "color.h"
  
  SYS_FUNC(sysctl)
  {
-@@ -39,7 +40,7 @@ SYS_FUNC(sysctl)
- 	    umoven(tcp, (unsigned long) info.name, size, name) < 0) {
- 		free(name);
- 		if (entering(tcp))
--			tprintf("{%p, %d, %p, %p, %p, %lu}",
-+			tprintf("{" C_CYAN "%p" C_RESET ", " C_CYAN "%d" C_RESET ", " C_CYAN "%p" C_RESET ", " C_CYAN "%p" C_RESET ", " C_CYAN "%p" C_RESET ", " C_CYAN "%lu" C_RESET "}",
- 				info.name, info.nlen, info.oldval,
- 				info.oldlenp, info.newval, (unsigned long)info.newlen);
- 		return RVAL_DECODED;
-@@ -140,14 +141,14 @@ out:
- 		if (abbrev(tcp) && max_cnt > max_strlen)
- 			max_cnt = max_strlen;
- 		while (cnt < max_cnt)
--			tprintf(", %x", name[cnt++]);
-+			tprintf(", " C_CYAN "%x" C_RESET, name[cnt++]);
- 		if (cnt < (unsigned) info.nlen)
- 			tprints(", ...");
--		tprintf("}, %d, ", info.nlen);
-+		tprintf("}," C_CYAN "%d" C_RESET ", ", info.nlen);
- 	} else {
- 		size_t oldlen = 0;
- 		if (info.oldval == NULL) {
--			tprints("NULL");
-+			tprints(C_CYAN "NULL" C_RESET);
- 		} else if (umove(tcp, ptr_to_kulong(info.oldlenp), &oldlen) >= 0
- 			   && info.nlen >= 2
- 			   && ((name[0] == CTL_KERN
-@@ -156,16 +157,16 @@ out:
- 					)))) {
- 			printpath(tcp, ptr_to_kulong(info.oldval));
- 		} else {
--			tprintf("%p", info.oldval);
-+			tprintf(C_CYAN "%p" C_RESET, info.oldval);
- 		}
--		tprintf(", %lu, ", (unsigned long)oldlen);
-+		tprintf(", " C_CYAN "%lu" C_RESET ", ", (unsigned long)oldlen);
- 		if (info.newval == NULL)
--			tprints("NULL");
-+			tprints(C_CYAN "NULL" C_RESET);
- 		else if (syserror(tcp))
--			tprintf("%p", info.newval);
-+			tprintf(C_CYAN "%p" C_RESET, info.newval);
- 		else
- 			printpath(tcp, ptr_to_kulong(info.newval));
--		tprintf(", %lu", (unsigned long)info.newlen);
-+		tprintf(", " C_CYAN "%lu" C_RESET, (unsigned long)info.newlen);
- 	}
- 
- 	free(name);
 diff --git a/src/term.c b/src/term.c
-index 73cc7d63c..0a07010d1 100644
+index 323395d56..29c02b329 100644
 --- a/src/term.c
 +++ b/src/term.c
-@@ -17,6 +17,7 @@
- #include "xlat/tcflsh_options.h"
- #include "xlat/baud_options.h"
- #include "xlat/modem_flags.h"
+@@ -40,6 +40,8 @@
+ # define termio_cc termios_cc
+ #endif
+ 
++#include "color.h"
++
+ static void
+ decode_oflag(uint64_t val)
+ {
+@@ -165,6 +167,7 @@ decode_termios2(struct tcb *const tcp, const kernel_ulong_t addr)
+ 	tprint_struct_end();
+ }
+ #endif /* HAVE_STRUCT_TERMIOS2 */
 +#include "color.h"
  
  static void
  decode_termios(struct tcb *const tcp, const kernel_ulong_t addr)
-@@ -36,15 +37,15 @@ decode_termios(struct tcb *const tcp, const kernel_ulong_t addr)
- 			(tios.c_lflag & ECHO) ? "" : "-");
- 		return;
- 	}
--	tprintf("{c_iflags=%#lx, c_oflags=%#lx, ",
-+	tprintf("{" C_BLUE "c_iflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", " C_BLUE "c_oflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", ",
- 		(long) tios.c_iflag, (long) tios.c_oflag);
--	tprintf("c_cflags=%#lx, c_lflags=%#lx, ",
-+	tprintf(C_BLUE "c_cflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", " C_BLUE "c_lflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", ",
- 		(long) tios.c_cflag, (long) tios.c_lflag);
--	tprintf("c_line=%u, ", tios.c_line);
-+	tprintf(C_BLUE "c_line" C_RESET "=" C_CYAN "%u" C_RESET ", ", tios.c_line);
- 	if (!(tios.c_lflag & ICANON))
--		tprintf("c_cc[VMIN]=%d, c_cc[VTIME]=%d, ",
-+		tprintf(C_BLUE "c_cc[VMIN]" C_RESET "=" C_CYAN "%d" C_RESET ", " C_BLUE "c_cc[VTIME]" C_RESET "=" C_CYAN "%d" C_RESET ", ",
- 			tios.c_cc[VMIN], tios.c_cc[VTIME]);
--	tprints("c_cc=");
-+	tprints(C_BLUE "c_cc=" C_RESET);
- 	print_quoted_string((char *) tios.c_cc, NCCS, QUOTE_FORCE_HEX);
- 	tprints("}");
- }
-@@ -67,24 +68,24 @@ decode_termio(struct tcb *const tcp, const kernel_ulong_t addr)
- 			(tio.c_lflag & ECHO) ? "" : "-");
- 		return;
- 	}
--	tprintf("{c_iflags=%#lx, c_oflags=%#lx, ",
-+	tprintf("{" C_BLUE "c_iflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", " C_BLUE "c_oflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", ",
- 		(long) tio.c_iflag, (long) tio.c_oflag);
--	tprintf("c_cflags=%#lx, c_lflags=%#lx, ",
-+	tprintf(C_BLUE "c_cflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", " C_BLUE "c_lflags" C_RESET "=" C_CYAN "%#lx" C_RESET ", ",
- 		(long) tio.c_cflag, (long) tio.c_lflag);
--	tprintf("c_line=%u, ", tio.c_line);
-+	tprintf(C_BLUE "c_line" C_RESET "=" C_CYAN "%u" C_RESET ", ", tio.c_line);
- #ifdef _VMIN
- 	if (!(tio.c_lflag & ICANON))
--		tprintf("c_cc[_VMIN]=%d, c_cc[_VTIME]=%d, ",
-+		tprintf(C_BLUE "c_cc[_VMIN]" C_RESET "=" C_CYAN "%d" C_RESET ", " C_BLUE "c_cc[_VTIME]" C_RESET "="  C_CYAN "%d" C_RESET ", ",
- 			tio.c_cc[_VMIN], tio.c_cc[_VTIME]);
- #else /* !_VMIN */
- 	if (!(tio.c_lflag & ICANON))
--		tprintf("c_cc[VMIN]=%d, c_cc[VTIME]=%d, ",
-+		tprintf(C_BLUE "c_cc[VMIN]" C_RESET "=" C_CYAN "%d" C_RESET ", " C_BLUE "c_cc[VTIME]" C_RESET "=" C_CYAN "%d" C_RESET ", ",
- 			tio.c_cc[VMIN], tio.c_cc[VTIME]);
- #endif /* !_VMIN */
--	tprints("c_cc=\"");
-+	tprints(C_BLUE "c_cc" C_RESET "=" C_GREEN "\"");
- 	for (int i = 0; i < NCC; ++i)
- 		tprintf("\\x%02x", tio.c_cc[i]);
--	tprints("\"}");
-+	tprints("\"" C_RESET "}");
- }
- 
- static void
-@@ -95,7 +96,7 @@ decode_winsize(struct tcb *const tcp, const kernel_ulong_t addr)
- 	tprints(", ");
- 	if (umove_or_printaddr(tcp, addr, &ws))
- 		return;
--	tprintf("{ws_row=%d, ws_col=%d, ws_xpixel=%d, ws_ypixel=%d}",
-+	tprintf("{" C_BLUE "ws_row" C_RESET "=" C_CYAN "%d" C_RESET ", " C_BLUE "ws_col" C_RESET "=" C_CYAN "%d" C_RESET ", " C_BLUE "ws_xpixel" C_RESET "=" C_CYAN "%d" C_RESET ", " C_BLUE "ws_ypixel" C_RESET "=" C_CYAN "%d" C_RESET "}",
- 		ws.ws_row, ws.ws_col, ws.ws_xpixel, ws.ws_ypixel);
- }
- 
-@@ -108,7 +109,7 @@ decode_ttysize(struct tcb *const tcp, const kernel_ulong_t addr)
- 	tprints(", ");
- 	if (umove_or_printaddr(tcp, addr, &ts))
- 		return;
--	tprintf("{ts_lines=%d, ts_cols=%d}",
-+	tprintf("{" C_BLUE "ts_lines" C_RESET "=" C_CYAN "%d" C_RESET ", " C_BLUE "ts_cols" C_RESET "=" C_CYAN "%d" C_RESET "}",
- 		ts.ts_lines, ts.ts_cols);
- }
- #endif
-@@ -199,7 +200,7 @@ term_ioctl(struct tcb *const tcp, const unsigned int code,
- 	case TCSBRK:
- 	case TCSBRKP:
- 	case TIOCSCTTY:
--		tprintf(", %d", (int) arg);
-+		tprintf(", " C_CYAN "%d" C_RESET, (int) arg);
- 		break;
- 
- 	/* ioctls with an indirect parameter displayed as modem flags */
 diff --git a/src/util.c b/src/util.c
-index c4c4bc0ef..e49bcd1d6 100644
+index 65fcf97bd..4fad20280 100644
 --- a/src/util.c
 +++ b/src/util.c
 @@ -32,6 +32,7 @@
@@ -1132,25 +834,16 @@ index c4c4bc0ef..e49bcd1d6 100644
  
  const struct xlat_data *
  find_xlat_val_ex(const struct xlat_data * const items, const char * const s,
-@@ -402,7 +403,7 @@ void
- printaddr64(const uint64_t addr)
- {
- 	if (!addr)
--		tprints("NULL");
-+		tprints(C_CYAN "NULL" C_RESET);
- 	else
- 		PRINT_VAL_X(addr);
- }
-@@ -667,7 +668,7 @@ printdev(struct tcb *tcp, int fd, const char *path)
- 		print_quoted_string_ex(path, strlen(path),
+@@ -668,7 +669,7 @@ printdev(struct tcb *tcp, int fd, const char *path)
  				       QUOTE_OMIT_LEADING_TRAILING_QUOTES,
  				       "<>");
--		tprintf("<%s %u:%u>>",
-+		tprintf("<" C_BLUE "%s" C_RESET " " C_CYAN "%u" C_RESET ":" C_CYAN "%u" C_RESET ">>",
+ 		tprint_associated_info_begin();
+-		tprintf("%s %u:%u",
++		tprintf(C_BLUE "%s" C_RESET " " C_CYAN "%u" C_RESET ":" C_CYAN "%u" C_RESET,
  			S_ISBLK(st.st_mode)? "block" : "char",
  			major(st.st_rdev), minor(st.st_rdev));
- 		return true;
-@@ -1061,7 +1062,8 @@ print_quoted_string_ex(const char *str, unsigned int size,
+ 		tprint_associated_info_end();
+@@ -1065,7 +1066,8 @@ print_quoted_string_ex(const char *str, unsigned int size,
  	}
  
  	rc = string_quote(str, outstr, size, style, escape_chars);
@@ -1160,25 +853,7 @@ index c4c4bc0ef..e49bcd1d6 100644
  
  	if (((style & (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0))
  	     == (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0)) && rc) {
-@@ -1110,7 +1112,7 @@ printpathn(struct tcb *const tcp, const kernel_ulong_t addr, unsigned int n)
- 	int nul_seen;
- 
- 	if (!addr) {
--		tprints("NULL");
-+		tprints(C_CYAN "NULL" C_RESET);
- 		return -1;
- 	}
- 
-@@ -1164,7 +1166,7 @@ printstr_ex(struct tcb *const tcp, const kernel_ulong_t addr,
- 	int ellipsis;
- 
- 	if (!addr) {
--		tprints("NULL");
-+		tprints(C_CYAN "NULL" C_RESET);
- 		return -1;
- 	}
- 	/* Allocate static buffers if they are not allocated yet. */
-@@ -1214,7 +1216,7 @@ printstr_ex(struct tcb *const tcp, const kernel_ulong_t addr,
+@@ -1218,7 +1220,7 @@ printstr_ex(struct tcb *const tcp, const kernel_ulong_t addr,
  		   && ((style & (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0))
  		       || len > max_strlen);
  
@@ -1187,7 +862,7 @@ index c4c4bc0ef..e49bcd1d6 100644
  	if (ellipsis)
  		tprint_more_data_follows();
  
-@@ -1255,7 +1257,7 @@ print_nonzero_bytes(struct tcb *const tcp,
+@@ -1259,7 +1261,7 @@ print_nonzero_bytes(struct tcb *const tcp,
  		ret = false;
  	} else {
  		prefix_fun();
@@ -1196,7 +871,7 @@ index c4c4bc0ef..e49bcd1d6 100644
  
  		print_quoted_string(str, size, style);
  
-@@ -1313,7 +1315,7 @@ dumpiov_upto(struct tcb *const tcp, const int len, const kernel_ulong_t addr,
+@@ -1317,7 +1319,7 @@ dumpiov_upto(struct tcb *const tcp, const int len, const kernel_ulong_t addr,
  			data_size -= iov_len;
  			/* include the buffer number to make it easy to
  			 * match up the trace with the source */
@@ -1205,7 +880,7 @@ index c4c4bc0ef..e49bcd1d6 100644
  			dumpstr(tcp, iov_iov_base(i), iov_len);
  		}
  	}
-@@ -1453,7 +1455,7 @@ dumpstr(struct tcb *const tcp, const kernel_ulong_t addr,
+@@ -1457,7 +1459,7 @@ dumpstr(struct tcb *const tcp, const kernel_ulong_t addr,
  			src++;
  		} while (++i & DUMPSTR_BYTES_MASK);
  
@@ -1214,26 +889,8 @@ index c4c4bc0ef..e49bcd1d6 100644
  			offs_chars, i - DUMPSTR_WIDTH_BYTES, outbuf);
  	}
  }
-@@ -1620,7 +1622,7 @@ print_array_ex(struct tcb *const tcp,
- 	       const char *index_dflt)
- {
- 	if (!start_addr) {
--		tprints("NULL");
-+		tprints(C_CYAN "NULL" C_RESET);
- 		return false;
- 	}
- 
-@@ -1756,7 +1758,7 @@ print_abnormal_hi(const kernel_ulong_t val)
- 	if (current_klongsize > 4) {
- 		const unsigned int hi = (unsigned int) ((uint64_t) val >> 32);
- 		if (hi)
--			tprintf("%#x<<32|", hi);
-+			tprintf(C_CYAN "%#x" C_RESET "<<" C_CYAN "32" C_RESET "|", hi);
- 	}
- }
- 
 diff --git a/src/wait.c b/src/wait.c
-index 9880831c3..7bc4985e9 100644
+index 6ef81b4b3..ff35929b0 100644
 --- a/src/wait.c
 +++ b/src/wait.c
 @@ -20,6 +20,7 @@
@@ -1262,17 +919,8 @@ index 9880831c3..7bc4985e9 100644
  			WEXITSTATUS(status));
  		exited = 1;
  		status &= ~W_EXITCODE(WEXITSTATUS(status), 0);
-@@ -66,7 +67,7 @@ printstatus(int status)
- 		if (event) {
- 			tprints(" | ");
- 			printxval(ptrace_events, event, "PTRACE_EVENT_???");
--			tprints(" << 16");
-+			tprints(" << " C_CYAN "16" C_RESET);
- 			status &= 0xffff;
- 		}
- 		if (status) {
 diff --git a/src/xlat.c b/src/xlat.c
-index fed9586b5..a9e37665b 100644
+index 10a7f7918..cbce404a2 100644
 --- a/src/xlat.c
 +++ b/src/xlat.c
 @@ -12,6 +12,7 @@
@@ -1302,7 +950,7 @@ index fed9586b5..a9e37665b 100644
  
  			goto printxvals_ex_end;
 @@ -441,7 +442,7 @@ printflags_ex(uint64_t flags, const char *dflt, enum xlat_style style,
- 					tprints("|");
+ 					tprint_or();
  				else if (need_comment)
  					tprint_comment_begin();
 -				tprints(xlat->data[idx].str);

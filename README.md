@@ -47,10 +47,10 @@ git clone https://github.com/strace/strace
 cd strace
 ```
 
-Checkout the tag `v6.0` (latest version)
+Checkout the tag `v6.1` (latest version)
 
 ```text
-git checkout tags/v6.0
+git checkout tags/v6.1
 ```
 
 Get the patch source [here](https://github.com/xfgusta/strace-with-colors) and apply it
