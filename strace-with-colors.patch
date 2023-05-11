@@ -78,7 +78,7 @@ index e9999c5f2..946851391 100644
  SYS_FUNC(shmget)
  {
 diff --git a/src/mem.c b/src/mem.c
-index f98a25e2c..b73434ea3 100644
+index a959bf708..9f09a1258 100644
 --- a/src/mem.c
 +++ b/src/mem.c
 @@ -14,6 +14,7 @@
@@ -141,7 +141,7 @@ index ce793f4b5..668f506fb 100644
  		dumpiov_upto(tcp, mmsg.msg_hdr.msg_iovlen,
  			     ptr_to_kulong(mmsg.msg_hdr.msg_iov),
 diff --git a/src/netlink.c b/src/netlink.c
-index a07ff00bb..b83159e3e 100644
+index e75e90440..e36031fc0 100644
 --- a/src/netlink.c
 +++ b/src/netlink.c
 @@ -52,6 +52,7 @@
@@ -186,7 +186,7 @@ index 3e7fb2984..b2f74992f 100644
  	printflags_ex(flags, NULL, XLAT_STYLE_ABBREV, mpol_mode_flags, NULL);
  	tprint_flags_end();
 diff --git a/src/perf.c b/src/perf.c
-index 76c4fab08..43dd68da5 100644
+index 1a39cd0c7..4fe1bff1d 100644
 --- a/src/perf.c
 +++ b/src/perf.c
 @@ -25,6 +25,7 @@
@@ -198,7 +198,7 @@ index 76c4fab08..43dd68da5 100644
  struct pea_desc {
  	struct perf_event_attr *attr;
 diff --git a/src/print_fields.h b/src/print_fields.h
-index b8cc84858..9d7b354ff 100644
+index 60ecf56af..b51683460 100644
 --- a/src/print_fields.h
 +++ b/src/print_fields.h
 @@ -10,6 +10,7 @@
@@ -523,7 +523,7 @@ index ee1ce8828..7b7b77d39 100644
  
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE || !cid_str)
 diff --git a/src/strace.c b/src/strace.c
-index 21b693d02..999a861a9 100644
+index 85d69485f..0c43e0d6d 100644
 --- a/src/strace.c
 +++ b/src/strace.c
 @@ -43,6 +43,8 @@
@@ -535,7 +535,7 @@ index 21b693d02..999a861a9 100644
  /* In some libc, these aren't declared. Do it ourself: */
  extern char **environ;
  extern int optind;
-@@ -93,6 +95,12 @@ static int rflag_scale = 1000;
+@@ -95,6 +97,12 @@ static int rflag_scale = 1000;
  static int rflag_width = 6;
  static bool print_pid_pfx;
  
@@ -548,7 +548,7 @@ index 21b693d02..999a861a9 100644
  static unsigned int version_verbosity;
  
  /* -I n */
-@@ -343,6 +351,8 @@ Filtering:\n\
+@@ -350,6 +358,8 @@ Filtering:\n\
                   print only syscalls that returned with an error code\n\
  \n\
  Output format:\n\
@@ -557,7 +557,7 @@ index 21b693d02..999a861a9 100644
    -a COLUMN, --columns=COLUMN\n\
                   alignment COLUMN for printing syscall results (default %d)\n\
    -e abbrev=SET, --abbrev=SET\n\
-@@ -704,7 +714,23 @@ static void
+@@ -716,7 +726,23 @@ static void
  tvprintf(const char *const fmt, va_list args)
  {
  	if (current_tcp) {
@@ -582,7 +582,7 @@ index 21b693d02..999a861a9 100644
  		if (n < 0) {
  			/* very unlikely due to vfprintf buffering */
  			outf_perror(current_tcp);
-@@ -730,7 +756,22 @@ void
+@@ -742,7 +768,22 @@ void
  tprints_string(const char *str)
  {
  	if (current_tcp) {
@@ -606,7 +606,7 @@ index 21b693d02..999a861a9 100644
  		if (n >= 0) {
  			current_tcp->curcol += strlen(str);
  			return;
-@@ -873,7 +914,7 @@ printleader(struct tcb *tcp)
+@@ -885,7 +926,7 @@ printleader(struct tcb *tcp)
  		else
  			xsprintf(str, "%lld", (long long) local);
  		if (tflag_width)
@@ -615,7 +615,7 @@ index 21b693d02..999a861a9 100644
  				       (long) ts.tv_nsec / tflag_scale);
  		else
  			tprintf_string("%s ", str);
-@@ -891,10 +932,10 @@ printleader(struct tcb *tcp)
+@@ -903,10 +944,10 @@ printleader(struct tcb *tcp)
  		ts_sub(&dts, &ts, &ots);
  		ots = ts;
  
@@ -628,7 +628,7 @@ index 21b693d02..999a861a9 100644
  				       (long) dts.tv_nsec / rflag_scale);
  		}
  		tprints_string(tflag_format ? ") " : " ");
-@@ -2249,6 +2290,7 @@ init(int argc, char *argv[])
+@@ -2263,6 +2304,7 @@ init(int argc, char *argv[])
  
  	enum {
  		GETOPT_SECCOMP = 0x100,
@@ -636,7 +636,7 @@ index 21b693d02..999a861a9 100644
  		GETOPT_DAEMONIZE,
  		GETOPT_HEX_STR,
  		GETOPT_FOLLOWFORKS,
-@@ -2274,6 +2316,7 @@ init(int argc, char *argv[])
+@@ -2291,6 +2333,7 @@ init(int argc, char *argv[])
  		GETOPT_QUAL_SECONTEXT,
  	};
  	static const struct option longopts[] = {
@@ -644,7 +644,7 @@ index 21b693d02..999a861a9 100644
  		{ "columns",		required_argument, 0, 'a' },
  		{ "output-append-mode",	no_argument,	   0, 'A' },
  		{ "detach-on",		required_argument, 0, 'b' },
-@@ -2381,6 +2424,23 @@ init(int argc, char *argv[])
+@@ -2401,6 +2444,23 @@ init(int argc, char *argv[])
  		case 'D':
  			daemonized_tracer++;
  			break;
@@ -668,7 +668,7 @@ index 21b693d02..999a861a9 100644
  		case GETOPT_DAEMONIZE:
  			daemonized_tracer_long =
  				find_arg_val(optarg, daemonize_str,
-@@ -2897,6 +2957,14 @@ init(int argc, char *argv[])
+@@ -2935,6 +2995,14 @@ init(int argc, char *argv[])
  			      qflag_short == 2 ? qqflag_qual : qqqflag_qual);
  	}
  
@@ -696,7 +696,7 @@ index aaa409a66..03446d282 100644
  SYS_FUNC(swapon)
  {
 diff --git a/src/syscall.c b/src/syscall.c
-index cc37aa30c..61f14c20e 100644
+index c636ba37c..db39380b1 100644
 --- a/src/syscall.c
 +++ b/src/syscall.c
 @@ -25,6 +25,7 @@
@@ -725,7 +725,7 @@ index cc37aa30c..61f14c20e 100644
  	}
  }
  
-@@ -759,7 +760,7 @@ print_syscall_resume(struct tcb *tcp)
+@@ -760,7 +761,7 @@ print_syscall_resume(struct tcb *tcp)
  	    || (tcp->flags & TCB_REPRINT)) {
  		tcp->flags &= ~TCB_REPRINT;
  		printleader(tcp);
@@ -734,7 +734,7 @@ index cc37aa30c..61f14c20e 100644
  	}
  	printing_tcp = tcp;
  }
-@@ -998,7 +999,7 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
+@@ -1012,7 +1013,7 @@ syscall_exiting_trace(struct tcb *tcp, struct timespec *ts, int res)
  		ts_sub(ts, ts, &tcp->etime);
  		PRINT_VAL_D(ts->tv_sec);
  		if (Tflag_width) {
@@ -768,7 +768,7 @@ index f392af3fd..2b2e0c786 100644
  static void
  decode_oflag(uint64_t val)
 diff --git a/src/util.c b/src/util.c
-index 4fe45bf13..76f36fcde 100644
+index 343cf8850..efea2b16a 100644
 --- a/src/util.c
 +++ b/src/util.c
 @@ -32,6 +32,7 @@
@@ -788,7 +788,7 @@ index 4fe45bf13..76f36fcde 100644
  			       (finfo->type == FINFO_DEV_BLK)? "block" : "char",
  			       finfo->dev.major, finfo->dev.minor);
  		tprint_associated_info_end();
-@@ -1097,7 +1098,7 @@ print_quoted_string_ex(const char *str, unsigned int size,
+@@ -1163,7 +1164,7 @@ print_quoted_string_ex(const char *str, unsigned int size,
  	}
  
  	rc = string_quote(str, outstr, size, style, escape_chars);
@@ -797,7 +797,7 @@ index 4fe45bf13..76f36fcde 100644
  
  	if (((style & (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0))
  	     == (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0)) && rc) {
-@@ -1250,7 +1251,7 @@ printstr_ex(struct tcb *const tcp, const kernel_ulong_t addr,
+@@ -1316,7 +1317,7 @@ printstr_ex(struct tcb *const tcp, const kernel_ulong_t addr,
  		   && ((style & (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0))
  		       || len > max_strlen);
  
@@ -806,7 +806,7 @@ index 4fe45bf13..76f36fcde 100644
  	if (ellipsis)
  		tprint_more_data_follows();
  
-@@ -1291,7 +1292,7 @@ print_nonzero_bytes(struct tcb *const tcp,
+@@ -1357,7 +1358,7 @@ print_nonzero_bytes(struct tcb *const tcp,
  		ret = false;
  	} else {
  		prefix_fun();
@@ -815,7 +815,7 @@ index 4fe45bf13..76f36fcde 100644
  
  		print_quoted_string(str, size, style);
  
-@@ -1349,8 +1350,7 @@ dumpiov_upto(struct tcb *const tcp, const int len, const kernel_ulong_t addr,
+@@ -1415,8 +1416,7 @@ dumpiov_upto(struct tcb *const tcp, const int len, const kernel_ulong_t addr,
  			data_size -= iov_len;
  			/* include the buffer number to make it easy to
  			 * match up the trace with the source */
@@ -825,7 +825,7 @@ index 4fe45bf13..76f36fcde 100644
  			dumpstr(tcp, iov_iov_base(i), iov_len);
  		}
  	}
-@@ -1490,7 +1490,7 @@ dumpstr(struct tcb *const tcp, const kernel_ulong_t addr,
+@@ -1556,7 +1556,7 @@ dumpstr(struct tcb *const tcp, const kernel_ulong_t addr,
  			src++;
  		} while (++i & DUMPSTR_BYTES_MASK);
  
