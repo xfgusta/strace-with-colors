@@ -674,7 +674,7 @@ index 85d69485f..0c43e0d6d 100644
  
 +	// --color=auto (default)
 +	if(no_color_flag == -1)
-+		no_color_flag = !isatty(STDOUT_FILENO);
++		no_color_flag = !isatty(STDERR_FILENO);
 +
 +	// if we set NO_COLOR or use --output
 +	if((getenv("NO_COLOR")) || outfname)
