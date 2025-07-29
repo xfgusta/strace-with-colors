@@ -13,9 +13,9 @@ From `strace --help`
 
 + `always` will always colorize the output
 + `never` will never colorize the output
-+ `auto` will only colorize the output when standard output is connected to a terminal
++ `auto` will only colorize the output when standard output is connected to a terminal and `--output` is not used.
 
-Using `--output` or setting the `NO_COLOR` environment variable will disable the colored output.
+Setting the `NO_COLOR` environment variable will disable the colored output.
 
 ## Installation
 
