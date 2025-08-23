@@ -17,7 +17,7 @@ index 000000000..e84b06672
 +
 +#endif
 diff --git a/src/futex.c b/src/futex.c
-index ac2c7ffd8..6c094b0a6 100644
+index 6fa557287..da69f4cbc 100644
 --- a/src/futex.c
 +++ b/src/futex.c
 @@ -25,6 +25,7 @@
@@ -29,7 +29,7 @@ index ac2c7ffd8..6c094b0a6 100644
  static int
  do_futex(struct tcb *const tcp, const print_obj_by_addr_fn print_ts)
 diff --git a/src/ioctl.c b/src/ioctl.c
-index fc6cef933..55ad6966e 100644
+index f4995caca..8f7757f24 100644
 --- a/src/ioctl.c
 +++ b/src/ioctl.c
 @@ -12,6 +12,7 @@
@@ -40,7 +40,7 @@ index fc6cef933..55ad6966e 100644
  
  #if defined(SPARC) || defined(SPARC64)
  /*
-@@ -480,10 +481,10 @@ SYS_FUNC(ioctl)
+@@ -534,10 +535,10 @@ SYS_FUNC(ioctl)
  				if (iop) {
  					if (ret)
  						tprint_alternative_value();
@@ -54,7 +54,7 @@ index fc6cef933..55ad6966e 100644
  				} else if (!ret) {
  					ioctl_print_code(tcp->u_arg[1]);
 diff --git a/src/ipc.c b/src/ipc.c
-index c9ccf2687..26cb80b4c 100644
+index 3fc6fb739..e3951cf78 100644
 --- a/src/ipc.c
 +++ b/src/ipc.c
 @@ -8,6 +8,7 @@
@@ -63,10 +63,10 @@ index c9ccf2687..26cb80b4c 100644
  #include "xlat/ipccalls.h"
 +#include "color.h"
  
- SYS_FUNC(ipc)
- {
+ static const char *ipc_arg_name[] = {
+ 	"first",
 diff --git a/src/ipc_shm.c b/src/ipc_shm.c
-index e9999c5f2..946851391 100644
+index 546f46646..e6e4dae21 100644
 --- a/src/ipc_shm.c
 +++ b/src/ipc_shm.c
 @@ -26,6 +26,7 @@
@@ -78,7 +78,7 @@ index e9999c5f2..946851391 100644
  SYS_FUNC(shmget)
  {
 diff --git a/src/mem.c b/src/mem.c
-index a959bf708..9f09a1258 100644
+index 4ff80ec26..a16a02b41 100644
 --- a/src/mem.c
 +++ b/src/mem.c
 @@ -14,6 +14,7 @@
@@ -89,7 +89,7 @@ index a959bf708..9f09a1258 100644
  
  unsigned long
  get_pagesize(void)
-@@ -90,7 +91,7 @@ print_mmap_flags(kernel_ulong_t flags)
+@@ -91,7 +92,7 @@ print_mmap_flags(kernel_ulong_t flags)
  		 * print_xlat_u is not used here because the whole thing
  		 * is potentially inside a comment already.
  		 */
@@ -99,7 +99,7 @@ index a959bf708..9f09a1258 100644
  	}
  
 diff --git a/src/memfd_create.c b/src/memfd_create.c
-index a4509a27d..6fbed3f1f 100644
+index 0d495c769..adad1f78c 100644
 --- a/src/memfd_create.c
 +++ b/src/memfd_create.c
 @@ -9,6 +9,7 @@
@@ -110,7 +110,7 @@ index a4509a27d..6fbed3f1f 100644
  
  #ifndef MFD_NAME_MAX_LEN
  # define MFD_NAME_MAX_LEN (255 - (sizeof("memfd:") - 1))
-@@ -52,7 +53,7 @@ SYS_FUNC(memfd_create)
+@@ -53,7 +54,7 @@ SYS_FUNC(memfd_create)
  		 * print_xlat_u is not used here because the whole thing
  		 * is potentially inside a comment already.
  		 */
@@ -120,7 +120,7 @@ index a4509a27d..6fbed3f1f 100644
  	}
  
 diff --git a/src/mmsghdr.c b/src/mmsghdr.c
-index ce793f4b5..668f506fb 100644
+index 549d74ba5..614a3970a 100644
 --- a/src/mmsghdr.c
 +++ b/src/mmsghdr.c
 @@ -13,6 +13,7 @@
@@ -141,7 +141,7 @@ index ce793f4b5..668f506fb 100644
  		dumpiov_upto(tcp, mmsg.msg_hdr.msg_iovlen,
  			     ptr_to_kulong(mmsg.msg_hdr.msg_iov),
 diff --git a/src/netlink.c b/src/netlink.c
-index e75e90440..e36031fc0 100644
+index bbd8d35c5..edb7605a0 100644
 --- a/src/netlink.c
 +++ b/src/netlink.c
 @@ -52,6 +52,7 @@
@@ -165,7 +165,7 @@ index e0d689421..70829659e 100644
  DECL_NETLINK_DIAG_DECODER(decode_netlink_diag_req)
  {
 diff --git a/src/numa.c b/src/numa.c
-index 3e7fb2984..b2f74992f 100644
+index c81d09d5f..ab26eff6a 100644
 --- a/src/numa.c
 +++ b/src/numa.c
 @@ -8,6 +8,7 @@
@@ -176,7 +176,7 @@ index 3e7fb2984..b2f74992f 100644
  
  static bool
  print_node(struct tcb *tcp, void *elem_buf, size_t elem_size, void *data)
-@@ -96,7 +97,7 @@ print_mode(struct tcb *const tcp, const kernel_ulong_t mode_arg)
+@@ -97,7 +98,7 @@ print_mode(struct tcb *const tcp, const kernel_ulong_t mode_arg)
  		tprint_comment_begin();
  
  	tprint_flags_begin();
@@ -186,7 +186,7 @@ index 3e7fb2984..b2f74992f 100644
  	printflags_ex(flags, NULL, XLAT_STYLE_ABBREV, mpol_mode_flags, NULL);
  	tprint_flags_end();
 diff --git a/src/perf.c b/src/perf.c
-index 1a39cd0c7..4fe1bff1d 100644
+index 80a85571f..684c73570 100644
 --- a/src/perf.c
 +++ b/src/perf.c
 @@ -25,6 +25,7 @@
@@ -198,7 +198,7 @@ index 1a39cd0c7..4fe1bff1d 100644
  struct pea_desc {
  	struct perf_event_attr *attr;
 diff --git a/src/print_fields.h b/src/print_fields.h
-index 60ecf56af..b51683460 100644
+index b5b020c00..59e37c02f 100644
 --- a/src/print_fields.h
 +++ b/src/print_fields.h
 @@ -10,6 +10,7 @@
@@ -209,7 +209,25 @@ index 60ecf56af..b51683460 100644
  
  # ifdef IN_STRACE
  
-@@ -140,13 +141,13 @@ tprint_bitset_end(void)
+@@ -110,7 +111,7 @@ tprint_array_index_end(void)
+ static inline void
+ tprints_arg_begin(const char *name)
+ {
+-	STRACE_PRINTF("%s(", name);
++	STRACE_PRINTF(C_RED "%s" C_RESET "(", name);
+ }
+ 
+ static inline void
+@@ -128,7 +129,7 @@ tprint_arg_end(void)
+ static inline void
+ tprints_arg_name_unconditionally(const char *name)
+ {
+-	STRACE_PRINTF("%s=", name);
++	STRACE_PRINTF(C_BLUE "%s" C_RESET "=", name);
+ }
+ 
+ static inline void
+@@ -175,13 +176,13 @@ tprint_bitset_end(void)
  static inline void
  tprint_comment_begin(void)
  {
@@ -225,7 +243,7 @@ index 60ecf56af..b51683460 100644
  }
  
  static inline void
-@@ -256,7 +257,7 @@ tprint_space(void)
+@@ -291,7 +292,7 @@ tprint_space(void)
  static inline void
  tprint_null(void)
  {
@@ -234,7 +252,7 @@ index 60ecf56af..b51683460 100644
  }
  
  static inline void
-@@ -268,13 +269,13 @@ tprint_newline(void)
+@@ -303,7 +304,7 @@ tprint_newline(void)
  static inline void
  tprints_field_name(const char *name)
  {
@@ -243,23 +261,7 @@ index 60ecf56af..b51683460 100644
  }
  
  static inline void
- tprints_arg_name_begin(const char *name)
- {
--	STRACE_PRINTF("%s=", name);
-+	STRACE_PRINTF(C_BLUE "%s" C_RESET "=", name);
- }
- 
- static inline void
-@@ -285,7 +286,7 @@ tprint_arg_name_end(void)
- static inline void
- tprints_arg_begin(const char *name)
- {
--	STRACE_PRINTF("%s(", name);
-+	STRACE_PRINTF(C_RED "%s" C_RESET "(", name);
- }
- 
- static inline void
-@@ -319,19 +320,19 @@ tprint_sysret_end(void)
+@@ -337,19 +338,19 @@ tprint_sysret_end(void)
  }
  
  # define PRINT_VAL_D(val_)	\
@@ -356,7 +358,7 @@ index baab46449..a718627cf 100644
  
  void
 diff --git a/src/ptrace.c b/src/ptrace.c
-index 663a5f314..be9b7d61b 100644
+index 1615256f1..cb411e683 100644
 --- a/src/ptrace.c
 +++ b/src/ptrace.c
 @@ -31,6 +31,7 @@
@@ -368,7 +370,7 @@ index 663a5f314..be9b7d61b 100644
  #define uoff(member)	offsetof(struct user, member)
  #define XLAT_UOFF(member)	{ uoff(member), "offsetof(struct user, " #member ")" }
 diff --git a/src/s390.c b/src/s390.c
-index ca71730c4..7b0dd6bea 100644
+index 3e237e639..e303a567a 100644
 --- a/src/s390.c
 +++ b/src/s390.c
 @@ -16,6 +16,7 @@
@@ -433,7 +435,7 @@ index ca71730c4..7b0dd6bea 100644
  	tprint_struct_begin();
  	PRINT_FIELD_0X(*hdr, infhflg1);
  
-@@ -1349,7 +1350,7 @@ guard_storage_print_gsepl(struct tcb *tcp, uint64_t addr)
+@@ -1350,7 +1351,7 @@ guard_storage_print_gsepl(struct tcb *tcp, uint64_t addr)
  	/* Since it is 64-bit even on 31-bit s390... */
  	if (sizeof(addr) > current_klongsize &&
  	    addr >= (1ULL << (current_klongsize * 8))) {
@@ -443,7 +445,7 @@ index ca71730c4..7b0dd6bea 100644
  		return;
  	}
 diff --git a/src/signal.c b/src/signal.c
-index 98f84d500..c1879aaaa 100644
+index 64ff6d5a6..076955002 100644
 --- a/src/signal.c
 +++ b/src/signal.c
 @@ -15,6 +15,7 @@
@@ -469,7 +471,7 @@ index 98f84d500..c1879aaaa 100644
  }
  
  static void
-@@ -810,8 +815,11 @@ SYS_FUNC(rt_sigtimedwait_time64)
+@@ -831,8 +836,11 @@ SYS_FUNC(rt_sigtimedwait_time64)
  
  SYS_FUNC(restart_syscall)
  {
@@ -484,10 +486,10 @@ index 98f84d500..c1879aaaa 100644
  	return RVAL_DECODED;
  }
 diff --git a/src/sockaddr.c b/src/sockaddr.c
-index ee1ce8828..7b7b77d39 100644
+index 553286148..7664a9bee 100644
 --- a/src/sockaddr.c
 +++ b/src/sockaddr.c
-@@ -39,6 +39,7 @@
+@@ -43,6 +43,7 @@
  #include "xlat/bluetooth_l2_cid.h"
  #include "xlat/bluetooth_l2_psm.h"
  #include "xlat/hci_channels.h"
@@ -495,7 +497,7 @@ index ee1ce8828..7b7b77d39 100644
  
  #include "xlat/rxrpc_services.h"
  
-@@ -181,7 +182,7 @@ print_inet_addr(const int af,
+@@ -185,7 +186,7 @@ print_inet_addr(const int af,
  			if (var_name &&
  			    (xlat_verbose(xlat_verbosity) == XLAT_STYLE_ABBREV)) {
  				tprint_arg_next();
@@ -504,7 +506,7 @@ index ee1ce8828..7b7b77d39 100644
  			}
  			tprint_arg_end();
  
-@@ -628,7 +629,7 @@ print_bluetooth_l2_psm(uint16_t psm)
+@@ -702,7 +703,7 @@ print_bluetooth_l2_psm(uint16_t psm)
  		tprint_plus();
  		PRINT_VAL_U(psm_he - L2CAP_PSM_DYN_START);
  	} else {
@@ -513,7 +515,7 @@ index ee1ce8828..7b7b77d39 100644
  	}
  
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE || !psm_str)
-@@ -663,7 +664,7 @@ print_bluetooth_l2_cid(uint16_t cid)
+@@ -737,7 +738,7 @@ print_bluetooth_l2_cid(uint16_t cid)
  		tprint_plus();
  		PRINT_VAL_U(cid_he - L2CAP_CID_DYN_START);
  	} else {
@@ -523,10 +525,10 @@ index ee1ce8828..7b7b77d39 100644
  
  	if (xlat_verbose(xlat_verbosity) == XLAT_STYLE_VERBOSE || !cid_str)
 diff --git a/src/strace.c b/src/strace.c
-index 85d69485f..0c43e0d6d 100644
+index 0f88bb00a..a217f718d 100644
 --- a/src/strace.c
 +++ b/src/strace.c
-@@ -43,6 +43,8 @@
+@@ -44,6 +44,8 @@
  #include "wait.h"
  #include "secontext.h"
  
@@ -535,7 +537,7 @@ index 85d69485f..0c43e0d6d 100644
  /* In some libc, these aren't declared. Do it ourself: */
  extern char **environ;
  extern int optind;
-@@ -95,6 +97,12 @@ static int rflag_scale = 1000;
+@@ -97,6 +99,12 @@ static int rflag_scale = 1000;
  static int rflag_width = 6;
  static bool print_pid_pfx;
  
@@ -548,7 +550,7 @@ index 85d69485f..0c43e0d6d 100644
  static unsigned int version_verbosity;
  
  /* -I n */
-@@ -350,6 +358,8 @@ Filtering:\n\
+@@ -361,6 +369,8 @@ Filtering:\n\
                   print only syscalls that returned with an error code\n\
  \n\
  Output format:\n\
@@ -557,7 +559,7 @@ index 85d69485f..0c43e0d6d 100644
    -a COLUMN, --columns=COLUMN\n\
                   alignment COLUMN for printing syscall results (default %d)\n\
    -e abbrev=SET, --abbrev=SET\n\
-@@ -716,7 +726,23 @@ static void
+@@ -749,7 +759,23 @@ static void
  tvprintf(const char *const fmt, va_list args)
  {
  	if (current_tcp) {
@@ -582,7 +584,7 @@ index 85d69485f..0c43e0d6d 100644
  		if (n < 0) {
  			/* very unlikely due to vfprintf buffering */
  			outf_perror(current_tcp);
-@@ -742,7 +768,22 @@ void
+@@ -775,7 +801,22 @@ void
  tprints_string(const char *str)
  {
  	if (current_tcp) {
@@ -606,7 +608,7 @@ index 85d69485f..0c43e0d6d 100644
  		if (n >= 0) {
  			current_tcp->curcol += strlen(str);
  			return;
-@@ -885,7 +926,7 @@ printleader(struct tcb *tcp)
+@@ -918,7 +959,7 @@ printleader(struct tcb *tcp)
  		else
  			xsprintf(str, "%lld", (long long) local);
  		if (tflag_width)
@@ -615,7 +617,7 @@ index 85d69485f..0c43e0d6d 100644
  				       (long) ts.tv_nsec / tflag_scale);
  		else
  			tprintf_string("%s ", str);
-@@ -903,10 +944,10 @@ printleader(struct tcb *tcp)
+@@ -936,10 +977,10 @@ printleader(struct tcb *tcp)
  		ts_sub(&dts, &ts, &ots);
  		ots = ts;
  
@@ -628,7 +630,7 @@ index 85d69485f..0c43e0d6d 100644
  				       (long) dts.tv_nsec / rflag_scale);
  		}
  		tprints_string(tflag_format ? ") " : " ");
-@@ -2263,6 +2304,7 @@ init(int argc, char *argv[])
+@@ -2336,6 +2377,7 @@ init(int argc, char *argv[])
  
  	enum {
  		GETOPT_SECCOMP = 0x100,
@@ -636,7 +638,7 @@ index 85d69485f..0c43e0d6d 100644
  		GETOPT_DAEMONIZE,
  		GETOPT_HEX_STR,
  		GETOPT_FOLLOWFORKS,
-@@ -2291,6 +2333,7 @@ init(int argc, char *argv[])
+@@ -2369,6 +2411,7 @@ init(int argc, char *argv[])
  		GETOPT_QUAL_SECONTEXT,
  	};
  	static const struct option longopts[] = {
@@ -644,7 +646,7 @@ index 85d69485f..0c43e0d6d 100644
  		{ "columns",		required_argument, 0, 'a' },
  		{ "output-append-mode",	no_argument,	   0, 'A' },
  		{ "detach-on",		required_argument, 0, 'b' },
-@@ -2401,6 +2444,23 @@ init(int argc, char *argv[])
+@@ -2485,6 +2528,23 @@ init(int argc, char *argv[])
  		case 'D':
  			daemonized_tracer++;
  			break;
@@ -668,7 +670,7 @@ index 85d69485f..0c43e0d6d 100644
  		case GETOPT_DAEMONIZE:
  			daemonized_tracer_long =
  				find_arg_val(optarg, daemonize_str,
-@@ -2935,6 +2995,14 @@ init(int argc, char *argv[])
+@@ -3126,6 +3186,14 @@ init(int argc, char *argv[])
  			      qflag_short == 2 ? qqflag_qual : qqqflag_qual);
  	}
  
@@ -684,7 +686,7 @@ index 85d69485f..0c43e0d6d 100644
  	 * startup_child() must be called before the signal handlers get
  	 * installed below as they are inherited into the spawned process.
 diff --git a/src/swapon.c b/src/swapon.c
-index aaa409a66..03446d282 100644
+index 678989d7d..fca03f85a 100644
 --- a/src/swapon.c
 +++ b/src/swapon.c
 @@ -10,6 +10,7 @@
@@ -696,7 +698,7 @@ index aaa409a66..03446d282 100644
  SYS_FUNC(swapon)
  {
 diff --git a/src/syscall.c b/src/syscall.c
-index c636ba37c..db39380b1 100644
+index 84249a4d2..4abda6414 100644
 --- a/src/syscall.c
 +++ b/src/syscall.c
 @@ -25,6 +25,7 @@
@@ -725,7 +727,7 @@ index c636ba37c..db39380b1 100644
  	}
  }
  
-@@ -760,7 +761,7 @@ print_syscall_resume(struct tcb *tcp)
+@@ -757,7 +758,7 @@ print_syscall_resume(struct tcb *tcp)
  	    || (tcp->flags & TCB_REPRINT)) {
  		tcp->flags &= ~TCB_REPRINT;
  		printleader(tcp);
@@ -744,10 +746,10 @@ index c636ba37c..db39380b1 100644
  		}
  		tprint_associated_info_end();
 diff --git a/src/sysctl.c b/src/sysctl.c
-index 8624e018e..bd48df718 100644
+index a4d26f75c..223960f44 100644
 --- a/src/sysctl.c
 +++ b/src/sysctl.c
-@@ -11,6 +11,7 @@
+@@ -12,6 +12,7 @@
  #include <linux/sysctl.h>
  typedef struct __sysctl_args struct_sysctl_args;
  #include MPERS_DEFS
@@ -756,7 +758,7 @@ index 8624e018e..bd48df718 100644
  SYS_FUNC(sysctl)
  {
 diff --git a/src/term.c b/src/term.c
-index f392af3fd..2b2e0c786 100644
+index 8484e7010..adbfc86ef 100644
 --- a/src/term.c
 +++ b/src/term.c
 @@ -41,6 +41,7 @@
@@ -768,7 +770,7 @@ index f392af3fd..2b2e0c786 100644
  static void
  decode_oflag(uint64_t val)
 diff --git a/src/util.c b/src/util.c
-index 343cf8850..efea2b16a 100644
+index 0d6d7da45..683f58a33 100644
 --- a/src/util.c
 +++ b/src/util.c
 @@ -32,6 +32,7 @@
@@ -779,7 +781,7 @@ index 343cf8850..efea2b16a 100644
  
  const struct xlat_data *
  find_xlat_val_ex(const struct xlat_data * const items, const char * const s,
-@@ -696,7 +697,7 @@ printdev(struct tcb *tcp, int fd, const char *path, const struct finfo *finfo)
+@@ -790,7 +791,7 @@ printdev(struct tcb *tcp, int fd, const char *path, const struct finfo *finfo)
  				       QUOTE_OMIT_LEADING_TRAILING_QUOTES,
  				       "<>");
  		tprint_associated_info_begin();
@@ -787,8 +789,8 @@ index 343cf8850..efea2b16a 100644
 +		tprintf_string(C_BLUE "%s" C_RESET " " C_CYAN "%u" C_RESET ":" C_CYAN "%u" C_RESET,
  			       (finfo->type == FINFO_DEV_BLK)? "block" : "char",
  			       finfo->dev.major, finfo->dev.minor);
- 		tprint_associated_info_end();
-@@ -1163,7 +1164,7 @@ print_quoted_string_ex(const char *str, unsigned int size,
+ 		if (is_ptmx(finfo) && finfo->dev.tty_index >= 0)
+@@ -1328,7 +1329,7 @@ print_quoted_string_ex(const char *str, unsigned int size,
  	}
  
  	rc = string_quote(str, outstr, size, style, escape_chars);
@@ -797,7 +799,7 @@ index 343cf8850..efea2b16a 100644
  
  	if (((style & (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0))
  	     == (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0)) && rc) {
-@@ -1316,7 +1317,7 @@ printstr_ex(struct tcb *const tcp, const kernel_ulong_t addr,
+@@ -1484,7 +1485,7 @@ printstr_ex(struct tcb *const tcp, const kernel_ulong_t addr,
  		   && ((style & (QUOTE_0_TERMINATED | QUOTE_EXPECT_TRAILING_0))
  		       || len > max_strlen);
  
@@ -806,7 +808,7 @@ index 343cf8850..efea2b16a 100644
  	if (ellipsis)
  		tprint_more_data_follows();
  
-@@ -1357,7 +1358,7 @@ print_nonzero_bytes(struct tcb *const tcp,
+@@ -1525,7 +1526,7 @@ print_nonzero_bytes(struct tcb *const tcp,
  		ret = false;
  	} else {
  		prefix_fun();
@@ -815,7 +817,7 @@ index 343cf8850..efea2b16a 100644
  
  		print_quoted_string(str, size, style);
  
-@@ -1415,8 +1416,7 @@ dumpiov_upto(struct tcb *const tcp, const int len, const kernel_ulong_t addr,
+@@ -1583,8 +1584,7 @@ dumpiov_upto(struct tcb *const tcp, const int len, const kernel_ulong_t addr,
  			data_size -= iov_len;
  			/* include the buffer number to make it easy to
  			 * match up the trace with the source */
@@ -825,7 +827,7 @@ index 343cf8850..efea2b16a 100644
  			dumpstr(tcp, iov_iov_base(i), iov_len);
  		}
  	}
-@@ -1556,7 +1556,7 @@ dumpstr(struct tcb *const tcp, const kernel_ulong_t addr,
+@@ -1724,7 +1724,7 @@ dumpstr(struct tcb *const tcp, const kernel_ulong_t addr,
  			src++;
  		} while (++i & DUMPSTR_BYTES_MASK);
  
@@ -835,7 +837,7 @@ index 343cf8850..efea2b16a 100644
  	}
  }
 diff --git a/src/wait.c b/src/wait.c
-index 1f04e836e..950c8f526 100644
+index 8092674c5..f9f310404 100644
 --- a/src/wait.c
 +++ b/src/wait.c
 @@ -20,6 +20,7 @@
@@ -865,7 +867,7 @@ index 1f04e836e..950c8f526 100644
  		exited = 1;
  		status &= ~W_EXITCODE(WEXITSTATUS(status), 0);
 diff --git a/src/xlat.c b/src/xlat.c
-index 5135ab440..6d6c72290 100644
+index f961552cc..6d960d7e5 100644
 --- a/src/xlat.c
 +++ b/src/xlat.c
 @@ -12,6 +12,7 @@
@@ -885,7 +887,7 @@ index 5135ab440..6d6c72290 100644
  }
  
  static int
-@@ -231,7 +232,7 @@ printxvals_ex(const uint64_t val, const char *dflt, enum xlat_style style,
+@@ -244,7 +245,7 @@ printxvals_ex(const uint64_t val, const char *dflt, enum xlat_style style,
  				print_xlat_val(val, style);
  				tprints_comment(str);
  			} else {
@@ -894,7 +896,7 @@ index 5135ab440..6d6c72290 100644
  			}
  
  			goto printxvals_ex_end;
-@@ -441,7 +442,7 @@ printflags_ex(uint64_t flags, const char *dflt, enum xlat_style style,
+@@ -454,7 +455,7 @@ printflags_ex(uint64_t flags, const char *dflt, enum xlat_style style,
  					tprint_flags_or();
  				else if (need_comment)
  					tprint_comment_begin();
@@ -903,7 +905,7 @@ index 5135ab440..6d6c72290 100644
  				flags &= ~v;
  			}
  			if (!flags)
-@@ -486,7 +487,7 @@ print_xlat_ex(const uint64_t val, const char *str, uint32_t style)
+@@ -499,7 +500,7 @@ print_xlat_ex(const uint64_t val, const char *str, uint32_t style)
  				print_xlat_val(val, style);
  				tprints_comment(str);
  			} else {
