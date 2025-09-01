@@ -675,11 +675,11 @@ index 0f88bb00a..a217f718d 100644
  	}
  
 +	// --color=auto (default)
-+	if(no_color_flag == -1)
++	if(no_color_flag == -1 && !outfname)
 +		no_color_flag = !isatty(STDOUT_FILENO);
 +
-+	// if we set NO_COLOR or use --output
-+	if((getenv("NO_COLOR")) || outfname)
++	// if we set NO_COLOR
++	if(getenv("NO_COLOR"))
 +		no_color_flag = 1;
 +
  	/*
